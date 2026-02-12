@@ -1,0 +1,6 @@
+@Robbiealazer8768364_Week3_HostAddress = http://localhost:5006
+
+GET {{Robbiealazer8768364_Week3_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
