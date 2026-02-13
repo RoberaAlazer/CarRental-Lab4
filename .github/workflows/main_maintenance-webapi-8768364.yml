@@ -21,35 +21,34 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore Maintenance.WebAPI/Maintenance.WebAPI.csproj
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release --no-restore
 
-      - name: Publish (Maintenance.WebAPI only)
-        run: dotnet publish Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release -o publish --no-build
+      - name: Publish
+        run: dotnet publish Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release -o ${{ env.DOTNET_ROOT }}/myapp --no-build
 
-      - name: Upload artifact
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: maintenance-webapi
-          path: publish
+          name: .net-app
+          path: ${{ env.DOTNET_ROOT }}/myapp
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Download artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: maintenance-webapi
-          path: publish
+          name: .net-app
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'maintenance-webapi-8768364'
           slot-name: 'Production'
-          package: publish
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0E03B8CC22DB4428993C5E2027AD8446 }}
