@@ -12,7 +12,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapGet("/", () => Results.Redirect("/swagger"));
 app.UseHttpsRedirection();
 app.MapControllers();
-app.MapGet("/", () => "Maintenance API is running. Go to /swagger");
+
 app.Run();
