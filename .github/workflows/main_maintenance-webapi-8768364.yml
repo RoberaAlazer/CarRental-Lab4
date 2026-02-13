@@ -34,8 +34,8 @@ jobs:
           path: webapi
       - uses: azure/webapps-deploy@v3
         with:
-          app-name: 'maintenance-webapi-8768364'
-          slot-name: 'Production'
+          app-name: maintenance-webapi-8768364
+          slot-name: Production
           package: webapi
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0E03B8CC22DB4428993C5E2027AD8446 }}
 
@@ -48,9 +48,9 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - run: dotnet restore _8768364RobbieAlazer_MVC/_8768364RobbieAlazer_MVC.csproj
-      - run: dotnet build _8768364RobbieAlazer_MVC/_8768364RobbieAlazer_MVC.csproj -c Release --no-restore
-      - run: dotnet publish _8768364RobbieAlazer_MVC/_8768364RobbieAlazer_MVC.csproj -c Release -o ${{ runner.temp }}/mvc --no-build
+      - run: dotnet restore 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj
+      - run: dotnet build 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj -c Release --no-restore
+      - run: dotnet publish 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj -c Release -o ${{ runner.temp }}/mvc --no-build
       - uses: actions/upload-artifact@v4
         with:
           name: mvc
@@ -66,7 +66,7 @@ jobs:
           path: mvc
       - uses: azure/webapps-deploy@v3
         with:
-          app-name: 'carrental-mvc-8768364'
-          slot-name: 'Production'
+          app-name: carrental-mvc-8768364
+          slot-name: Production
           package: mvc
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_MVC }}
