@@ -17,6 +17,15 @@
                 },
                 new RepairHistoryDto
                 {
+                    Id = 3,
+                    VehicleId = vehicleId,
+                    RepairDate = DateTime.Now.AddDays(-30),
+                    Description = "Tire rotation",
+                    Cost = 49.99m,
+                    PerformedBy = "Tire World"
+                },
+                new RepairHistoryDto
+                {
                     Id = 2,
                     VehicleId = vehicleId,
                     RepairDate = DateTime.Now.AddDays(-40),
