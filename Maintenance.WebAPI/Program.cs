@@ -9,11 +9,10 @@ builder.Services.AddScoped<IRepairHistoryService, FakeRepairHistoryService>();
 
 var app = builder.Build();
 
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.MapControllers();
-
+app.MapGet("/", () => "Maintenance API is running. Go to /swagger");
 app.Run();
