@@ -1,38 +1,41 @@
+#Name of the workflow 
 name: Build and deploy WebAPI and MVC
 
+# When this runs - on push to main branch or when manually triggered
 on:
   push:
     branches:
       - main
   workflow_dispatch:
 
+# Web API Build 
 jobs:
   build-webapi:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4 #Get the code from the repository
+      - uses: actions/setup-dotnet@v4 #Install .Net Core 
         with:
           dotnet-version: '8.x'
-      - run: dotnet restore Maintenance.WebAPI/Maintenance.WebAPI.csproj
-      - run: dotnet build Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release --no-restore
-      - run: dotnet publish Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release -o ${{ runner.temp }}/webapi --no-build
-      - uses: actions/upload-artifact@v4
+      - run: dotnet restore Maintenance.WebAPI/Maintenance.WebAPI.csproj #Download dependencies for the Web API project
+      - run: dotnet build Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release --no-restore # Compile the Web API project
+      - run: dotnet publish Maintenance.WebAPI/Maintenance.WebAPI.csproj -c Release -o ${{ runner.temp }}/webapi --no-build # Parepare the Web API for deployment by publishing it to a folder
+      - uses: actions/upload-artifact@v4 # Save files for the next job 
         with:
           name: webapi
           path: ${{ runner.temp }}/webapi
 
   deploy-webapi:
     runs-on: ubuntu-latest
-    needs: build-webapi
+    needs: build-webapi #Wait for the build to finish before starting the deployment
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4 # Grab files from the previous job 
         with:
           name: webapi
           path: webapi
-      - uses: azure/webapps-deploy@v3
+      - uses: azure/webapps-deploy@v3 # Send the app to Azure Web App for deployment
         with:
           app-name: maintenance-webapi-8768364
           slot-name: Production
@@ -44,27 +47,27 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4 #Get the code from the repository
+      - uses: actions/setup-dotnet@v4 #Install .Net Core
         with:
           dotnet-version: '8.x'
-      - run: dotnet restore 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj
-      - run: dotnet build 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj -c Release --no-restore
-      - run: dotnet publish 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj -c Release -o ${{ runner.temp }}/mvc --no-build
-      - uses: actions/upload-artifact@v4
+      - run: dotnet restore 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj #Download dependencies for the MVC project
+      - run: dotnet build 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj -c Release --no-restore # Compile the MVC project
+      - run: dotnet publish 8768364RobbieAlazer_MVC/8768364RobbieAlazer_MVC.csproj -c Release -o ${{ runner.temp }}/mvc --no-build # Parepare the MVC for deployment by publishing it to a folder
+      - uses: actions/upload-artifact@v4 # Save files for the next job
         with:
           name: mvc
           path: ${{ runner.temp }}/mvc
 
   deploy-mvc:
     runs-on: ubuntu-latest
-    needs: build-mvc
+    needs: build-mvc # Wait for MVC build to finish and grab files from the previous job
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4 # Grab MVC files
         with:
           name: mvc
           path: mvc
-      - uses: azure/webapps-deploy@v3
+      - uses: azure/webapps-deploy@v3 # Send the app to Azure Web App for deployment
         with:
           app-name: carrental-mvc-8768364
           slot-name: Production
