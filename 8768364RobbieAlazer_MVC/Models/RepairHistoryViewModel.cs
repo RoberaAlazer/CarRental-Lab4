@@ -1,9 +1,8 @@
 ﻿namespace _8768364RobbieAlazer_MVC.Models
 {
     public class RepairHistoryViewModel
-
     {
-         public int VehicleId { get; set; }
+        public int VehicleId { get; set; }
         public DateTime RepairDate { get; set; }
         public string Description { get; set; } = string.Empty;
         public decimal Cost { get; set; }

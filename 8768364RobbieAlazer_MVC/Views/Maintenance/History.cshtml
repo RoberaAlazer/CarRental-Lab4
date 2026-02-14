@@ -1,23 +1,25 @@
-﻿@model List<_8768364RobbieAlazer_MVC.Models.RepairHistoryViewModel>
+﻿@model _8768364RobbieAlazer_MVC.Models.RepairHistoryPageViewModel
 
 <h2>Vehicle Repair History</h2>
 
 <form method="post">
     <div class="form-group">
         <label>Vehicle ID</label>
-        <input type="number" name="vehicleId" class="form-control" required />
+        <input type="number" name="vehicleId" class="form-control" required value="@(Model.VehicleId ?? 0)" />
     </div>
 
-    <button type="submit" class="btn btn-primary mt-2">
-        View History
-    </button>
+    <button type="submit" class="btn btn-primary mt-2">View History</button>
 </form>
 
 <hr />
 
-@if (!Model.Any())
+@if (Model.VehicleId == null)
 {
-    <p>No repair history found.</p>
+    <p>Enter a Vehicle ID and click View History.</p>
+}
+else if (!Model.Repairs.Any())
+{
+    <p>No repair history found for Vehicle ID @Model.VehicleId.</p>
 }
 else
 {
@@ -31,7 +33,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var repair in Model)
+            @foreach (var repair in Model.Repairs)
             {
                 <tr>
                     <td>@repair.RepairDate.ToShortDateString()</td>

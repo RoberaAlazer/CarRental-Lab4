@@ -16,7 +16,7 @@ namespace _8768364RobbieAlazer_MVC.Controllers
         [HttpGet]
         public IActionResult History()
         {
-            return View(new List<RepairHistoryViewModel>());
+            return View(new RepairHistoryPageViewModel());
         }
 
         [HttpPost]
@@ -27,7 +27,11 @@ namespace _8768364RobbieAlazer_MVC.Controllers
             var repairs = await client.GetFromJsonAsync<List<RepairHistoryViewModel>>(
                 $"api/maintenance/vehicles/{vehicleId}/repairs");
 
-            return View(repairs ?? new List<RepairHistoryViewModel>());
+            return View(new RepairHistoryPageViewModel
+            {
+                VehicleId = vehicleId,
+                Repairs = repairs ?? new List<RepairHistoryViewModel>()
+            });
         }
     }
 }
