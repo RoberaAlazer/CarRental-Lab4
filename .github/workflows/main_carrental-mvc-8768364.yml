@@ -3,12 +3,14 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - carrental-mvc-8768364
 
+# Trigger the workflow on push or pull request events but only for the main branch
 on:
   push:
     branches:
       - main
   workflow_dispatch:
 
+# Build and deploy the app to Azure Web App
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,36 +19,39 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
+        # Checkout the repository to the GitHub runner
+        # .Net Core SDK is required to build the application.
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
+        
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release # Compile the application 
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp # prepare the app for deployment by publishing it to a folder
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4 #Save files for the next job (deploy) 
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
+# Send the app to Azure Web App for deployment
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build   #Don't start this job until the build job is complete
     
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4 # Get files from the previous job (build)
         with:
           name: .net-app
       
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+        id: deploy-to-webapp  # Upload the app to Azure Web
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'carrental-mvc-8768364'
