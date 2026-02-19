@@ -8,11 +8,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepairHistoryService, FakeRepairHistoryService>();
 
-var app = builder.Build();
+var usageCounts = new Dictionary<string, int>();
+builder.Services.AddSingleton(usageCounts);
 
-app.UseSwagger();
-app.UseSwaggerUI();
-app.MapGet("/", () => Results.Redirect("/swagger"));
+var app = builder.Build();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.MapGet("/", () => Results.Redirect("/swagger"));
+}
+
 
 app.UseHttpsRedirection();
 
@@ -22,7 +28,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMiddleware<ApiKeyMiddleware>();
 }
-
 
 app.MapControllers();
 app.Run();
