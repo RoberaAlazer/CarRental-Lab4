@@ -12,12 +12,12 @@ var usageCounts = new Dictionary<string, int>();
 builder.Services.AddSingleton(usageCounts);
 
 var app = builder.Build();
-if (!app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
+app.UseMiddleware<ApiKeyMiddleware>();
+
+app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapGet("/", () => Results.Redirect("/swagger"));
-}
+   
+
 
 
 app.UseHttpsRedirection();
