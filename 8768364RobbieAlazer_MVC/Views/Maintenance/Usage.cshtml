@@ -1,0 +1,12 @@
+﻿@model object
+
+<h2>API Usage</h2>
+
+<p>This shows the current usage by the Maintenance API.</p>
+
+<pre>
+    @System.Text.Json.JsonSerializer.Serialize(
+            Model,
+            new System.Text.Json.JsonSerializerOptions { WriteIndented = true }
+        )
+</pre>

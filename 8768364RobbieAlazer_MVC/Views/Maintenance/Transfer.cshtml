@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Transfer";
+}
+<h2>Transfer</h2>
+<form asp-action="Transfer" method="get">
+    <div>
+        <label for="fromId">From ID</label>
+        <input type="number" id="fromId" name="fromId" required />
+    </div>
+
+    <div>
+        <label for="toId">To ID</label>
+        <input type="number" id="toId" name="toId" required />
+    </div>
+
+    <div>
+        <label for="amount">Amount</label>
+        <input type="number" step="0.01" id="amount" name="amount" required />
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+@if (ViewBag.Result != null)
+{
+    <h3>Result</h3>
+    <pre>@ViewBag.Result</pre>
+}
