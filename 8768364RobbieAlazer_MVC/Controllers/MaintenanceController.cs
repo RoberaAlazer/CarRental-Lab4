@@ -12,6 +12,13 @@ namespace _8768364RobbieAlazer_MVC.Controllers
         {
             _httpClientFactory = httpClientFactory;
         }
+        public async Task<IActionResult> Usage()
+        {
+            var client = _httpClientFactory.CreateClient("MaintenanceApi");
+            var result = await client.GetFromJsonAsync<object>("api/RepairHistory/usage");
+            return View(result);
+        }
+
 
         [HttpGet]
         public IActionResult History()
