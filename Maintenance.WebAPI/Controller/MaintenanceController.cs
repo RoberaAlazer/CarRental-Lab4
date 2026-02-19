@@ -14,12 +14,23 @@ namespace Maintenance.WebAPI.Controller
             _service = service;
         }
 
+        [HttpGet("crash")]
+        public IActionResult Crash()
+        {
+            int x = 0;
+            int y = 5 / x;
+            return Ok();
+        }
+
+
+
         [HttpGet("vehicles/{vehicleId}/repairs")]
         public IActionResult GetRepairHistory(int vehicleId)
         {
             var history = _service.GetByVehicleId(vehicleId);
             return Ok(history);
         }
+        
     }
 
 }
