@@ -12,22 +12,14 @@ var usageCounts = new Dictionary<string, int>();
 builder.Services.AddSingleton(usageCounts);
 
 var app = builder.Build();
-app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseSwagger();
-    app.UseSwaggerUI();
-   
-
-
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ApiKeyMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseMiddleware<ApiKeyMiddleware>();
-}
 
 app.MapControllers();
 app.Run();

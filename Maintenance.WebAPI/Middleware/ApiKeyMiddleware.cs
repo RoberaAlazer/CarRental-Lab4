@@ -1,5 +1,4 @@
 ﻿namespace Maintenance.WebAPI.Middleware
-
 {
     public class ApiKeyMiddleware
     {
@@ -9,12 +8,18 @@
         public ApiKeyMiddleware(RequestDelegate next, IConfiguration config)
         {
             _next = next;
-            _apiKey = config.GetValue<string>("ApiKey");
+            _apiKey = config.GetValue<string>("ApiKey") ?? "";
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!context.Request.Headers.TryGetValue("X-API-Key", out var providedKey))
+            if (context.Request.Path.StartsWithSegments("/swagger"))
+            {
+                await _next(context);
+                return;
+            }
+
+            if (!context.Request.Headers.TryGetValue("X-Api-Key", out var providedKey))
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("API Key was not provided.");
