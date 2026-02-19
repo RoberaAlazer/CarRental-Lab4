@@ -26,7 +26,7 @@
                 return;
             }
 
-            if (_apiKey != providedKey)
+            if (!string.Equals(_apiKey, providedKey.ToString(), StringComparison.Ordinal))
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("Unauthorized client.");

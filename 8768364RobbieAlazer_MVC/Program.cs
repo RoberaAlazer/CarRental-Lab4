@@ -4,13 +4,12 @@ using _8768364RobbieAlazer_MVC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// Add services to the container
 builder.Services.AddHttpClient("MaintenanceApi", (sp, client) =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
     client.BaseAddress = new Uri(config["MaintenanceApi:BaseUrl"]!);
-    client.DefaultRequestHeaders.Add("X-Api-Key", "5214eee0-0f8c-407b-9bc4-3b33db2030a2");
+    client.DefaultRequestHeaders.Add("X-Api-Key", config["MaintenanceApi:ApiKey"]!);
 });
 
 
